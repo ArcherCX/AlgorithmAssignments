@@ -9,20 +9,6 @@ public class PercolationStats implements IPercolationStats {
     private int trials;
     private double[] trailResults;
 
-    public static void main(String[] args) {
-        int n;
-        int trails;
-        if (false) {
-            n = Integer.parseInt(args[0]);
-            trails = Integer.parseInt(args[1]);
-        } else {
-            n = 200;
-            trails = 1;
-        }
-
-        PercolationStats ps = new PercolationStats(n, trails);
-        ps.startSimulate();
-    }
 
     /**
      * perform trials independent experiments on an n-by-n grid
@@ -33,17 +19,6 @@ public class PercolationStats implements IPercolationStats {
         trailResults = new double[trials];
     }
 
-    public void startSimulate() {
-        for (int i = 0; i < trials; i++) {
-            Percolation percolation = new Percolation(n);
-            while (!percolation.percolates()) {
-                percolation.randomOpenSite();
-            }
-            trailResults[i] = percolation.threshold();
-            System.out.println("threshod "+i+" : "+trailResults[i]);
-        }
-        logResult();
-    }
 
     @Override
     public double mean() {
@@ -63,6 +38,18 @@ public class PercolationStats implements IPercolationStats {
     @Override
     public double confidenceHi() {
         return mean() + stddev() * 1.96 / Math.sqrt(trials);
+    }
+
+    public void startSimulate() {
+        for (int i = 0; i < trials; i++) {
+            Percolation percolation = new Percolation(n);
+            while (!percolation.percolates()) {
+                percolation.randomOpenSite();
+            }
+            trailResults[i] = percolation.threshold();
+            StdOut.println("threshod "+i+" : "+trailResults[i]);
+        }
+        logResult();
     }
 
     private void logResult() {
