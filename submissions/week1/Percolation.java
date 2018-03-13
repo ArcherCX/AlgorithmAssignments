@@ -1,9 +1,7 @@
-package com.archer.assignment.week1;
-
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-public class Percolation implements IPercolation {
+public class Percolation {
 
     private final int n;
     private boolean[] openSites;
@@ -31,8 +29,7 @@ public class Percolation implements IPercolation {
         isIndexLegal(index);
         int[] neighbors = {/*left*/index - 1,/*top*/index - n,/*right*/index + 1,/*bottom*/index + n};
         int neighbor;
-        final int neighborNum = neighbors.length;
-        for (int i = 0; i < neighborNum; i++) {
+        for (int i = 0; i < 4; i++) {
             neighbor = neighbors[i];
             if (indexLegal(neighbor) && isOpen(neighbor)) {
                 uf.union(index, neighbor);

@@ -1,18 +1,16 @@
-package com.archer.assignment.week1;
-
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-public class PercolationStats implements IPercolationStats {
+public class PercolationStats {
 
     private int n;
     private int trials;
     private double[] trailResults;
 
     public static void main(String[] args) {
-        int n = 2;
-        int trials = 10000;
+        int n = 200;
+        int trials = 100;
         if (args.length == 2) {
             n = Integer.parseInt(args[0]);
             trials= Integer.parseInt(args[1]);
@@ -32,18 +30,22 @@ public class PercolationStats implements IPercolationStats {
     }
 
 
+    
     public double mean() {
         return StdStats.mean(trailResults);
     }
 
+    
     public double stddev() {
         return StdStats.stddev(trailResults);
     }
 
+    
     public double confidenceLo() {
         return mean() - stddev() * 1.96 / Math.sqrt(trials);
     }
 
+    
     public double confidenceHi() {
         return mean() + stddev() * 1.96 / Math.sqrt(trials);
     }

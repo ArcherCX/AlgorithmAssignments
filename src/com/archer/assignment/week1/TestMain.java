@@ -10,11 +10,57 @@ public class TestMain {
     public static void main(String[] args) {
     }
 
-    private static void testPercolationStats() {
-        int n = 200;
-        int trails = 1;
-        PercolationStats ps = new PercolationStats(n, trails);
-        ps.startSimulate();
+    /**
+     * 由文件内容作为输入，进行无图形绘制的检测
+     *
+     * @param path 输入的文件路径
+     */
+    private static void testPercolationNoUI(String path) {
+        File input = new File(path);
+        if (input.exists()) {
+            FileReader fr = null;
+            BufferedReader br = null;
+            try {
+                fr = new FileReader(input);
+                br = new BufferedReader(fr);
+                int n = Integer.parseInt(br.readLine());
+                String point;
+                Percolation perc = new Percolation(n);
+                int lineNo = 0;
+                while ((point = br.readLine()) != null) {
+                    String[] coor = point.trim().split(" ");
+                    // open site (i, j) provided it's in bounds
+                    final int row = Integer.parseInt(coor[0]);
+                    final int col = Integer.parseInt(coor[1]);
+                    if (!perc.isOpen(row, col)) {
+                        StdOut.println(row + " " + col);
+                    }
+                    perc.open(row, col);
+                    if (perc.percolates()) {
+                        StdOut.println("Now it's percolate");
+                        return;
+                    }
+                }
+                StdOut.println("This input file does not produce a percolate result");
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fr != null) {
+                    try {
+                        fr.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     /**
