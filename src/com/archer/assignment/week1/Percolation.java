@@ -33,7 +33,7 @@ public class Percolation implements IPercolation {
     }
 
     private void open(int index) {
-        isIndexLegal(index);
+        if (isOpen(index)) return;
         final int[] coor = convertIndexToCoor(index);
         int row = coor[0];
         int col = coor[1];
@@ -116,7 +116,7 @@ public class Percolation implements IPercolation {
      * @param col 列，纵坐标
      */
     private int convertCoorToIndex(int row, int col) {
-        if (row < 0 || col < 0)
+        if (row < 1 || col < 1 || row > n || col > n)
             throw new IllegalArgumentException("Parameter row or col is not between 1 and " + n + " : [row = " + row + " , col = " + col + "]");
         return (row - 1) * n + col - 1;
     }
