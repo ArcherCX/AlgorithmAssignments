@@ -1,6 +1,5 @@
 package com.archer.assignment.week1;
 
-import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation implements IPercolation {
@@ -10,6 +9,7 @@ public class Percolation implements IPercolation {
     private int openCount;
     private WeightedQuickUnionUF uf;
     private final int sitesNum;
+    private final int virtualTop, virtualBottom;
 
     /**
      * create n-by-n grid, with all sites blocked
@@ -18,21 +18,47 @@ public class Percolation implements IPercolation {
         if (n <= 0) throw new IllegalArgumentException("Parameter n should be > 0");
         this.n = n;
         sitesNum = n * n;
-        uf = new WeightedQuickUnionUF(sitesNum);
-        openSites = new boolean[sitesNum];
+        virtualTop = sitesNum;
+        virtualBottom = sitesNum + 1;
+        uf = new WeightedQuickUnionUF(sitesNum + 2);
+        openSites = new boolean[sitesNum + 2];
+        //虚拟点默认为open状态
+        openSites[virtualTop] = true;
+        openSites[virtualBottom] = true;
     }
 
-    
+
     public void open(int row, int col) {
         open(convertCoorToIndex(row, col));
     }
 
     private void open(int index) {
         isIndexLegal(index);
-        int[] neighbors = {/*left*/index - 1,/*top*/index - n,/*right*/index + 1,/*bottom*/index + n};
+        final int[] coor = convertIndexToCoor(index);
+        int row = coor[0];
+        int col = coor[1];
+        int[] neighbors = new int[4];
+        for (int i = 0; i < 4; i++) {
+            neighbors[i] = -1;
+        }
+        if (col != 1) {//非第一列，计算左部
+            neighbors[0] = index - 1;
+        }
+        if (row != 1) {//非第一行，计算顶部
+            neighbors[1] = index - n;
+        } else {//第一行，和虚拟顶点连接
+            uf.union(virtualTop, index);
+        }
+        if (col != n) {//非第n列，计算右部
+            neighbors[2] = index + 1;
+        }
+        if (row != n) {//非第n列，计算底部
+            neighbors[3] = index + n;
+        } else {//最后一行，和虚拟底部连接
+            uf.union(virtualBottom, index);
+        }
         int neighbor;
-        final int neighborNum = neighbors.length;
-        for (int i = 0; i < neighborNum; i++) {
+        for (int i = 0; i < 4; i++) {
             neighbor = neighbors[i];
             if (indexLegal(neighbor) && isOpen(neighbor)) {
                 uf.union(index, neighbor);
@@ -42,7 +68,7 @@ public class Percolation implements IPercolation {
         openCount++;
     }
 
-    
+
     public boolean isOpen(int row, int col) {
         return isOpen(convertCoorToIndex(row, col));
     }
@@ -52,32 +78,24 @@ public class Percolation implements IPercolation {
         return openSites[index];
     }
 
-    
+
     public boolean isFull(int row, int col) {
         return isFull(convertCoorToIndex(row, col));
     }
 
     private boolean isFull(int index) {
         isIndexLegal(index);
-        for (int i = 0; i < n; i++) {
-            if (uf.connected(index, i)) return true;
-        }
-        return false;
+        return uf.connected(virtualTop, index);
     }
 
-    
+
     public int numberOfOpenSites() {
         return openCount;
     }
 
-    
+
     public boolean percolates() {
-        for (int i = 0; i < n; i++) {
-            if (isFull(n, i + 1)) {
-                return true;
-            }
-        }
-        return false;
+        return uf.connected(virtualTop, virtualBottom);
     }
 
 
@@ -87,16 +105,19 @@ public class Percolation implements IPercolation {
 
     private void isIndexLegal(int index) {
         if (!indexLegal(index)) {
-            throw new IllegalArgumentException("Parameter row or col is not between 1 and n");
+            throw new IllegalArgumentException("Parameter index is not between 0 and " + sitesNum + " : " + index);
         }
     }
 
     /**
      * 将n-by-n网格的坐标转换成数组对应的索引
+     *
      * @param row 行，横坐标
      * @param col 列，纵坐标
      */
     private int convertCoorToIndex(int row, int col) {
+        if (row < 0 || col < 0)
+            throw new IllegalArgumentException("Parameter row or col is not between 1 and " + n + " : [row = " + row + " , col = " + col + "]");
         return (row - 1) * n + col - 1;
     }
 
@@ -105,8 +126,8 @@ public class Percolation implements IPercolation {
      */
     private int[] convertIndexToCoor(int index) {
         int[] coor = new int[2];
-        coor[0] = index / n + 1;
-        coor[1] = index % n;
+        coor[0] = index / n + 1;//row
+        coor[1] = index % n + 1;//col
         return coor;
     }
 

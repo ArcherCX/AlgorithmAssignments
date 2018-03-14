@@ -11,8 +11,8 @@ public class PercolationStats implements IPercolationStats {
     private double[] trailResults;
 
     public static void main(String[] args) {
-        int n = 2;
-        int trials = 10000;
+        int n = 200;
+        int trials = 100;
         if (args.length == 2) {
             n = Integer.parseInt(args[0]);
             trials= Integer.parseInt(args[1]);
@@ -57,7 +57,13 @@ public class PercolationStats implements IPercolationStats {
                 randomOpenSite(percolation);
             }
             trailResults[i] = threshold(percolation, sitesNum);
-            StdOut.println("threshod "+i+" : "+trailResults[i]);
+            int count = 0;
+            for (int j = 1; j < n+1; j++) {
+                for (int k = 1; k < n + 1; k++) {
+                    if (percolation.isOpen(j, k)) count++;
+                }
+            }
+            StdOut.println("threshod " + i + " : " + trailResults[i] + " , open times : " + count + " , open sites:" + percolation.numberOfOpenSites());
         }
         logResult();
     }
@@ -74,7 +80,7 @@ public class PercolationStats implements IPercolationStats {
      */
     private void randomOpenSite(Percolation perc) {
         int row, col;
-        while (perc.isOpen((row = StdRandom.uniform(n)+1), (col = StdRandom.uniform(n)+1))){}
+        while (perc.isOpen((row = StdRandom.uniform(1,n+1)), (col = StdRandom.uniform(1,1+n)))){}
         perc.open(row, col);
     }
 
