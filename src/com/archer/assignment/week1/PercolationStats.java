@@ -9,16 +9,17 @@ public class PercolationStats implements IPercolationStats {
     private int n;
     private int trials;
     private double[] trailResults;
+    private double mean;
+    private double stddev;
 
     public static void main(String[] args) {
-        int n = 200;
-        int trials = 100;
+        int n = 2;
+        int trials = 100000;
         if (args.length == 2) {
             n = Integer.parseInt(args[0]);
             trials= Integer.parseInt(args[1]);
-
         }
-        new PercolationStats(n, trials).startSimulate();
+        new PercolationStats(n, trials).logResult();
     }
 
 
@@ -26,26 +27,37 @@ public class PercolationStats implements IPercolationStats {
      * perform trials independent experiments on an n-by-n grid
      */
     public PercolationStats(int n, int trials) {
+        if (n <= 0 || trials <= 0) throw new IllegalArgumentException("Params n or trials should be > 0");
         this.n = n;
         this.trials = trials;
         trailResults = new double[trials];
+        startSimulate();
     }
 
 
     public double mean() {
-        return StdStats.mean(trailResults);
+        mean = StdStats.mean(trailResults);
+        return mean;
     }
 
     public double stddev() {
-        return StdStats.stddev(trailResults);
+        stddev = StdStats.stddev(trailResults);
+        return stddev;
     }
 
     public double confidenceLo() {
-        return mean() - stddev() * 1.96 / Math.sqrt(trials);
+        checkRet();
+        return mean - stddev * 1.96 / Math.sqrt(trials);
     }
 
     public double confidenceHi() {
-        return mean() + stddev() * 1.96 / Math.sqrt(trials);
+        checkRet();
+        return mean + stddev * 1.96 / Math.sqrt(trials);
+    }
+
+    private void checkRet() {
+        if (mean == 0) mean();
+        if (stddev == 0) stddev();
     }
 
     private void startSimulate() {
@@ -57,15 +69,8 @@ public class PercolationStats implements IPercolationStats {
                 randomOpenSite(percolation);
             }
             trailResults[i] = threshold(percolation, sitesNum);
-            int count = 0;
-            for (int j = 1; j < n+1; j++) {
-                for (int k = 1; k < n + 1; k++) {
-                    if (percolation.isOpen(j, k)) count++;
-                }
-            }
-            StdOut.println("threshod " + i + " : " + trailResults[i] + " , open times : " + count + " , open sites:" + percolation.numberOfOpenSites());
+//            StdOut.println("threshod " + i + " : " + trailResults[i]+" -- "+ Arrays.toString(percolation.openSites));
         }
-        logResult();
     }
 
     /**
@@ -80,7 +85,9 @@ public class PercolationStats implements IPercolationStats {
      */
     private void randomOpenSite(Percolation perc) {
         int row, col;
-        while (perc.isOpen((row = StdRandom.uniform(1,n+1)), (col = StdRandom.uniform(1,1+n)))){}
+        row = StdRandom.uniform(1, n + 1);
+        col = StdRandom.uniform(1, 1 + n);
+//        StdOut.println("row : " + row + " , col : " + col);
         perc.open(row, col);
     }
 

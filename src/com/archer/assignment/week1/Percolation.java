@@ -9,7 +9,7 @@ public class Percolation implements IPercolation {
     private int openCount;
     private WeightedQuickUnionUF uf;
     private final int sitesNum;
-    private final int virtualTop, virtualBottom;
+    private final int virtualTop;
 
     /**
      * create n-by-n grid, with all sites blocked
@@ -19,12 +19,10 @@ public class Percolation implements IPercolation {
         this.n = n;
         sitesNum = n * n;
         virtualTop = sitesNum;
-        virtualBottom = sitesNum + 1;
-        uf = new WeightedQuickUnionUF(sitesNum + 2);
-        openSites = new boolean[sitesNum + 2];
+        uf = new WeightedQuickUnionUF(sitesNum + 1);
+        openSites = new boolean[sitesNum + 1];
         //虚拟点默认为open状态
         openSites[virtualTop] = true;
-        openSites[virtualBottom] = true;
     }
 
 
@@ -54,8 +52,6 @@ public class Percolation implements IPercolation {
         }
         if (row != n) {//非第n列，计算底部
             neighbors[3] = index + n;
-        } else {//最后一行，和虚拟底部连接
-            uf.union(virtualBottom, index);
         }
         int neighbor;
         for (int i = 0; i < 4; i++) {
@@ -95,7 +91,12 @@ public class Percolation implements IPercolation {
 
 
     public boolean percolates() {
-        return uf.connected(virtualTop, virtualBottom);
+        for (int i = sitesNum - n; i < sitesNum; i++) {
+            if (isOpen(i)){
+                if(uf.connected(virtualTop, i)) return true;
+            }
+        }
+        return false;
     }
 
 

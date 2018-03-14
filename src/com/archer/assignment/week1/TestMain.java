@@ -5,19 +5,17 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Stopwatch;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class TestMain {
     public static void main(String[] args) {
-        final int n = 3;
-        Percolation perc = new Percolation(n);
-        final boolean open = perc.isOpen(1, 1);
-        final boolean full = perc.isFull(1, 1);
-        perc.open(-1, 5);
-        perc.open(2, 1);
-        perc.open(2, 1);
-        StdOut.println(open + " -- " + full);
-        StdOut.println("open sites number : " + perc.numberOfOpenSites());
-//        testPercolation("PercolationInputFiles/input6.txt");
+        Percolation percolation = new Percolation(3);
+        percolation.open(1,1);
+        percolation.open(2,1);
+        percolation.open(3,1);
+        percolation.open(2,3);
+        percolation.open(3,3);
+        System.out.println(percolation.isFull(2,3));
     }
 
     /**
@@ -38,7 +36,8 @@ public class TestMain {
                 Percolation perc = new Percolation(n);
                 int lineNo = 0;
                 while ((point = br.readLine()) != null) {
-                    String[] coor = point.trim().split(" ");
+                    if (point.trim().isEmpty()) continue;
+                    String[] coor = point.trim().split(" +");
                     // open site (i, j) provided it's in bounds
                     final int row = Integer.parseInt(coor[0]);
                     final int col = Integer.parseInt(coor[1]);
@@ -92,23 +91,28 @@ public class TestMain {
                 Percolation perc = new Percolation(n);
                 int lineNo = 0;
                 while ((point = br.readLine()) != null) {
-                    if (point.isEmpty()) continue;
+                    if (point.trim().isEmpty()) continue;
 //                    StdOut.println("line number :" + lineNo + " start -------");
-                    String[] coor = point.trim().split(" ");
+                    String[] coor = point.trim().split(" +");
                     // open site (i, j) provided it's in bounds
+                    System.out.println("point string : -" + point + "- point.trim : -" + point.trim() + "- , point.trim.isEmpty : " + point.trim().isEmpty()+" , split ret : "+ Arrays.toString(coor));
                     final int row = Integer.parseInt(coor[0]);
                     final int col = Integer.parseInt(coor[1]);
                     if (!perc.isOpen(row, col)) {
                         StdOut.println(row + " " + col);
                     }
                     perc.open(row, col);
-                    Stopwatch stopwatch = new Stopwatch();
+//                    Stopwatch stopwatch = new Stopwatch();
 //                    StdOut.println("line number :" + lineNo + " before draw");
                     // draw n-by-n percolation system
                     PercolationVisualizer.draw(perc, n);
 //                    StdOut.println("line number :" + lineNo + " before show ===== " + stopwatch.elapsedTime());
                     StdDraw.show();
 //                    StdOut.println("line number :" + lineNo + " after show **********" + stopwatch.elapsedTime());
+//                    if (row == 9 && col == 1) {
+//                        System.out.println("now break , open sites num = " + perc.numberOfOpenSites() + " -- 9,1 isFull ? " + perc.isFull(row, col));
+//                        break;
+//                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
