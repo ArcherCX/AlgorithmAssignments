@@ -9,8 +9,8 @@ public class PercolationStats implements IPercolationStats {
     private int n;
     private int trials;
     private double[] trailResults;
-    private double mean;
-    private double stddev;
+    private double mean = -1;
+    private double stddev = -1;
 
     public static void main(String[] args) {
         int n = 2;
@@ -56,8 +56,8 @@ public class PercolationStats implements IPercolationStats {
     }
 
     private void checkRet() {
-        if (mean == 0) mean();
-        if (stddev == 0) stddev();
+        if (mean == -1) mean();
+        if (stddev == -1) stddev();
     }
 
     private void startSimulate() {
