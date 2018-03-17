@@ -1,8 +1,7 @@
-package com.archer.assignment.week1;
 
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-public class Percolation implements IPercolation {
+public class Percolation {
 
     private final int n;
     private boolean[] openSites;
