@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class Deque<Item> implements IDeque<Item> {
-//    private static final int DEFAULT_SIZE = 1;
+    //    private static final int DEFAULT_SIZE = 1;
 //    private Item[] data;
     private Node<Item> head, tail;
     private int count;
@@ -66,7 +66,8 @@ public class Deque<Item> implements IDeque<Item> {
         checkEmpty();
         Item remove = head.item;
         head = head.next;
-        head.prev = null;
+        if (head != null) head.prev = null;
+        else tail = null;
         count--;
         return remove;
     }
@@ -76,7 +77,8 @@ public class Deque<Item> implements IDeque<Item> {
         checkEmpty();
         Item remove = tail.item;
         tail = tail.prev;
-        tail.next = null;
+        if (tail != null) tail.next = null;
+        else head = null;
         count--;
         return remove;
     }
@@ -88,6 +90,7 @@ public class Deque<Item> implements IDeque<Item> {
 
     /**
      * 参数空检查
+     *
      * @param param 需要检查的参数
      */
     private void checkNull(Item param) {
@@ -108,7 +111,7 @@ public class Deque<Item> implements IDeque<Item> {
 
         @Override
         public boolean hasNext() {
-            return current == null;
+            return current != null;
         }
 
         @Override

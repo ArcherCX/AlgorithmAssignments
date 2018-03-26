@@ -12,7 +12,6 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
 
     public RandomizedQueue() {
         this.data = (Item[]) new Object[DEFAULT_SIZE];
-        StdRandom.setSeed(System.currentTimeMillis());
     }
 
 
@@ -48,7 +47,8 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
         swap(de, index);//通过交换，保证有效item都在index范围内
         Item item = data[index];
         data[index--] = null;
-        if (index < data.length >> 2) decreaseSize();
+        int edge = data.length >> 2;
+        if (edge > 0 && index < edge) decreaseSize();
         return item;
     }
 
@@ -101,11 +101,10 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
     private class RQIterator implements Iterator<Item> {
         private int[] idxs;
         private int curret;
-        private final int size, maxIdx;
+        private final int size;
 
         private RQIterator() {
             size = size();
-            maxIdx = size - 1;
             idxs = new int[size];
             for (int i = 0; i < size; i++) {
                 idxs[i] = i;
@@ -117,12 +116,12 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
          * 打乱输出顺序
          */
         private void randomIdxs() {
-            StdRandom.setSeed(System.currentTimeMillis());
-            int swapTimes = size >> 1;//交换次数，因为进行交换的对象在前面，所以只要交换后一半即可
-            for (int i = size - 1; i > 0; i--) {
+            int swapTimes = (size >> 1);//交换次数，因为进行交换的对象在前面，所以只要交换后一半即可,但并不均匀
+            for (int i = size - 1; i > swapTimes; i--) {
                 int o = idxs[i];
-                idxs[i] = StdRandom.uniform(i);
-                idxs[idxs[i]] = o;
+                int replaced = StdRandom.uniform(i);
+                idxs[i] = idxs[replaced];
+                idxs[replaced] = o;
             }
         }
 
@@ -134,7 +133,7 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
 
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
-            return data[curret];
+            return data[idxs[curret++]];
         }
 
 
