@@ -1,9 +1,8 @@
-package com.archer.assignment.week2;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class Deque<Item> implements IDeque<Item> {
+public class Deque<Item> implements Iterable<Item> {
     //    private static final int DEFAULT_SIZE = 1;
 //    private Item[] data;
     private Node<Item> head, tail;
