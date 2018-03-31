@@ -109,7 +109,8 @@ public class RandomizedQueue<Item> implements IRandomizedQueue<Item> {
             for (int i = 0; i < size; i++) {
                 idxs[i] = i;
             }
-            randomIdxs();
+            StdRandom.shuffle(idxs);
+//            randomIdxs();
         }
 
         /**

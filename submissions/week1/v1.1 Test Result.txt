@@ -7,21 +7,21 @@ API:          PASSED
 
 Findbugs:     PASSED
 PMD:          PASSED
-Checkstyle:   FAILED (0 errors, 17 warnings)
+Checkstyle:   FAILED (0 errors, 16 warnings)
 
 Correctness:  30/30 tests passed
-Memory:       6/8 tests passed
-Timing:       6/20 tests passed
+Memory:       8/8 tests passed
+Timing:       20/20 tests passed
 
-Aggregate score: 83.50%
+Aggregate score: 100.00%
 [Compilation: 5%, API: 5%, Findbugs: 0%, PMD: 0%, Checkstyle: 0%, Correctness: 60%, Memory: 10%, Timing: 20%]
 
 ASSESSMENT DETAILS
 
 The following files were submitted:
 ----------------------------------
-4.0K Mar 14 03:29 Percolation.java
-2.5K Mar 14 03:29 PercolationStats.java
+4.0K Mar 17 11:52 Percolation.java
+2.7K Mar 17 11:52 PercolationStats.java
 
 
 ********************************************************************************
@@ -63,9 +63,10 @@ PercolationStats:
 % pmd .
 *-----------------------------------------------------------
 Percolation.java:9: The private instance (or static) variable 'uf' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
+Percolation.java:9: The private instance (or static) variable 'ufForBackwash' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
 PercolationStats.java:8: The private instance (or static) variable 'n' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
 PercolationStats.java:9: The private instance (or static) variable 'trials' can be made 'final'; it is initialized only in the declaration or constructor. [ImmutableField]
-PMD ends with 3 warnings.
+PMD ends with 4 warnings.
 
 
 ================================================================
@@ -73,28 +74,26 @@ PMD ends with 3 warnings.
 
 % checkstyle *.java
 *-----------------------------------------------------------
-[WARN] Percolation.java:45:24: '{' is not followed by whitespace. [WhitespaceAround]
-[WARN] Percolation.java:48:24: '{' is not followed by whitespace. [WhitespaceAround]
-[WARN] Percolation.java:50:17: '{' is not followed by whitespace. [WhitespaceAround]
+[WARN] Percolation.java:44:24: '{' is not followed by whitespace. [WhitespaceAround]
+[WARN] Percolation.java:47:24: '{' is not followed by whitespace. [WhitespaceAround]
+[WARN] Percolation.java:49:17: '{' is not followed by whitespace. [WhitespaceAround]
 [WARN] Percolation.java:53:24: '{' is not followed by whitespace. [WhitespaceAround]
 [WARN] Percolation.java:56:24: '{' is not followed by whitespace. [WhitespaceAround]
-[WARN] Percolation.java:100:27: '{' is not preceded with whitespace. [WhitespaceAround]
-[WARN] Percolation.java:101:19: 'if' is not followed by whitespace. [WhitespaceAfter]
-[WARN] Percolation.java:136:33: ';' is not followed by whitespace. [WhitespaceAfter]
-[WARN] Percolation.java:136:35: '//' or '/*' is not followed by whitespace. [WhitespaceAfter]
-[WARN] Percolation.java:137:33: ';' is not followed by whitespace. [WhitespaceAfter]
-[WARN] Percolation.java:137:35: '//' or '/*' is not followed by whitespace. [WhitespaceAfter]
-[WARN] PercolationStats.java:17:19: '=' is not preceded with whitespace. [WhitespaceAround]
-[WARN] PercolationStats.java:26:5: Define constructors after static and instance variables but before methods. [DeclarationOrder]
-Checkstyle ends with 0 errors and 13 warnings.
+[WARN] Percolation.java:58:17: '{' is not followed by whitespace. [WhitespaceAround]
+[WARN] Percolation.java:131:33: ';' is not followed by whitespace. [WhitespaceAfter]
+[WARN] Percolation.java:131:35: '//' or '/*' is not followed by whitespace. [WhitespaceAfter]
+[WARN] Percolation.java:132:33: ';' is not followed by whitespace. [WhitespaceAfter]
+[WARN] Percolation.java:132:35: '//' or '/*' is not followed by whitespace. [WhitespaceAfter]
+[WARN] PercolationStats.java:19:19: '=' is not preceded with whitespace. [WhitespaceAround]
+[WARN] PercolationStats.java:28:5: Define constructors after static and instance variables but before methods. [DeclarationOrder]
+Checkstyle ends with 0 errors and 12 warnings.
 
 % custom checkstyle checks for Percolation.java
 *-----------------------------------------------------------
-[INFO] Percolation.java:42: Using a loop in this method might be a performance bug. [Performance]
+[INFO] Percolation.java:41: Using a loop in this method might be a performance bug. [Performance]
 [INFO] Percolation.java:62: Using a loop in this method might be a performance bug. [Performance]
-[INFO] Percolation.java:99: Using a loop in this method might be a performance bug. [Performance]
-[WARN] Percolation.java:41:35: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
-[WARN] Percolation.java:42:29: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
+[WARN] Percolation.java:40:35: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
+[WARN] Percolation.java:41:29: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
 [WARN] Percolation.java:62:29: The numeric literal '4' appears to be unnecessary. [NumericLiteral]
 Checkstyle ends with 0 errors and 3 warnings.
 
@@ -388,14 +387,14 @@ Test 1a-1d: check memory usage as a function of T trials for n = 100
 
                  T        bytes
 --------------------------------------------
-=> passed       16          184
-=> passed       32          312
-=> passed       64          568
-=> passed      128         1080
+=> passed       16          200
+=> passed       32          328
+=> passed       64          584
+=> passed      128         1096
 ==> 4/4 tests passed
 
 
-Estimated student memory = 8.00 T + 56.00   (R^2 = 1.000)
+Estimated student memory = 8.00 T + 72.00   (R^2 = 1.000)
 
 Total: 4/4 tests passed!
 
@@ -413,42 +412,10 @@ Running 4 total tests.
 
 Test 1: count calls to StdStats.mean() and StdStats.stddev()
   * n =  20, trials =  10
-    - calls StdStats.mean() the wrong number of times
-    - number of student   calls to StdStats.mean() = 3
-    - number of reference calls to StdStats.mean() = 1
-
-    - calls StdStats.stddev() the wrong number of times
-    - number of student   calls to StdStats.stddev() = 3
-    - number of reference calls to StdStats.stddev() = 1
-
   * n =  50, trials =  20
-    - calls StdStats.mean() the wrong number of times
-    - number of student   calls to StdStats.mean() = 3
-    - number of reference calls to StdStats.mean() = 1
-
-    - calls StdStats.stddev() the wrong number of times
-    - number of student   calls to StdStats.stddev() = 3
-    - number of reference calls to StdStats.stddev() = 1
-
   * n = 100, trials =  50
-    - calls StdStats.mean() the wrong number of times
-    - number of student   calls to StdStats.mean() = 3
-    - number of reference calls to StdStats.mean() = 1
-
-    - calls StdStats.stddev() the wrong number of times
-    - number of student   calls to StdStats.stddev() = 3
-    - number of reference calls to StdStats.stddev() = 1
-
   * n =  64, trials = 150
-    - calls StdStats.mean() the wrong number of times
-    - number of student   calls to StdStats.mean() = 3
-    - number of reference calls to StdStats.mean() = 1
-
-    - calls StdStats.stddev() the wrong number of times
-    - number of student   calls to StdStats.stddev() = 3
-    - number of reference calls to StdStats.stddev() = 1
-
-==> FAILED
+==> passed
 
 Test 2: count calls to methods in StdRandom
   * n = 20, trials = 10
@@ -471,15 +438,16 @@ Test 4: Call PercolationStats methods with trials = 3 and values of n that go up
 
          n  seconds log ratio
      ------------------------
-       724     0.23       2.7
-      1024     0.53       2.4
-      1448     1.39       2.8
-      2048     3.65       2.8
-      2896     9.89       2.9
+       512     0.10       2.3
+       724     0.25       2.6
+      1024     0.71       3.0
+      1448     1.95       2.9
+      2048     4.66       2.5
+      2896     9.74       2.1
 ==> passed
 
 
-Total: 3/4 tests passed!
+Total: 4/4 tests passed!
 
 
 ================================================================
@@ -498,16 +466,22 @@ Test 1a-1d: check that total memory <= 17 n^2 + 128 n + 1024 bytes
 
                  n        bytes
 --------------------------------------------
-=> passed       64        37048
-=> passed      256       590008
-
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        OperationCountLimitExceededException
-        Number of calls to methods in WeightedQuickUnionUF exceeds limit: 100000000
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+=> passed       64        69936
+=> passed      256      1114416
+=> passed      512      4456752
+=> passed     1024     17826096
+==> 4/4 tests passed
 
 
-Total: 2/4 tests passed!
+Estimated student memory = 17.00 n^2 + 0.00 n + 304.00   (R^2 = 1.000)
+
+
+Test 2 (bonus): check that total memory <= 11 n^2 + 128 n + 1024 bytes
+   -  failed memory test for n = 64
+==> FAILED
+
+
+Total: 4/4 tests passed!
 
 ================================================================
 
@@ -528,19 +502,14 @@ Test 1a-1e: Creates an n-by-n percolation system; open sites at random until
                                        2 * connected()
                  n       union()              + find()        constructor
 -----------------------------------------------------------------------------------
-=> passed       16          124                  1550                   1
-=> FAILED       32          690                 12200   (1.7x)          1
-=> FAILED       64         2434                 69706   (2.4x)          1
-=> FAILED      128        11444                805068   (6.8x)          1
-=> FAILED      256        45904               5877358  (12.5x)          1
-=> FAILED      512       182764              49902392  (26.4x)          1
-
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        OperationCountLimitExceededException
-        Number of calls to methods in WeightedQuickUnionUF exceeds limit: 100000000
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-==> 1/7 tests passed
+=> passed       16          276                   270                   2
+=> passed       32         1603                  1288                   2
+=> passed       64         6421                  5122                   2
+=> passed      128        23370                 19538                   2
+=> passed      256        92174                 77688                   2
+=> passed      512       372194                312206                   2
+=> passed     1024      1464155               1239028                   2
+==> 7/7 tests passed
 
 
 If one of the values in the table violates the performance limits
@@ -557,14 +526,14 @@ Tests 2a-2f: Check whether the number of calls to union(), connected(), and find
 
                  n     per open()      per isOpen()    per isFull()    per percolates()
 ---------------------------------------------------------------------------------------------
-=> passed       16        4               0               1              11
-=> passed       32        4               0               1              21
-=> FAILED       64        4               0               1              36   (1.5x)
-=> FAILED      128        4               0               1              82   (3.4x)
-=> FAILED      256        4               0               1             158   (6.6x)
-=> FAILED      512        4               0               1             320  (13.3x)
-=> FAILED     1024        4               0               1             622  (25.9x)
-==> 2/7 tests passed
+=> passed       16        8               0               1               1
+=> passed       32        8               0               1               1
+=> passed       64        8               0               1               1
+=> passed      128        8               0               1               1
+=> passed      256        8               0               1               1
+=> passed      512        8               0               1               1
+=> passed     1024        8               0               1               1
+==> 7/7 tests passed
 
 
 
@@ -580,16 +549,13 @@ Test 3: Create an n-by-n percolation system; interleave calls to percolates()
                         log   union-find     log
          n  seconds   ratio   operations   ratio
      -------------------------------------------
-       362     0.12     3.4     17559320     3.1
-       512     0.28     2.6     51018136     3.1
-       724     0.78     2.9    138828068     2.9
-
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        OperationCountLimitExceededException
-        Number of calls to methods in WeightedQuickUnionUF exceeds limit: 100000000
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-==> FAILED
+       724     0.11     2.1      2072538     1.9
+      1024     0.30     2.8      4148838     2.0
+      1448     0.79     2.8      8383788     2.0
+      2048     2.29     3.1     16934284     2.0
+      2896     5.19     2.4     33479314     2.0
+      4096     8.27     1.3     67381528     2.0
+==> passed
 
 
 
@@ -601,19 +567,16 @@ Test 4: Create an n-by-n percolation system; interleave calls to open(),
                         log   union-find     log
          n  seconds   ratio   operations   ratio
      -------------------------------------------
-       362     0.10     2.9     16794670     3.0
-       512     0.26     2.7     46625040     2.9
-       724     0.78     3.2    128334640     2.9
-
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        OperationCountLimitExceededException
-        Number of calls to methods in WeightedQuickUnionUF exceeds limit: 100000000
-        ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-==> FAILED
+       724     0.11     3.4      2711386     2.0
+      1024     0.27     2.7      5489120     2.0
+      1448     0.77     3.1     10828082     2.0
+      2048     1.73     2.3     21773162     2.0
+      2896     4.03     2.4     43738228     2.0
+      4096     8.79     2.3     86786562     2.0
+==> passed
 
 
-Total: 3/16 tests passed!
+Total: 16/16 tests passed!
 
 
 ================================================================

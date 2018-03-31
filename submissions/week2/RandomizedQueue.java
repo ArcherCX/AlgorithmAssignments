@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizedQueue<Item> implements Iterable<Item> {
+public class RandomizedQueue<Item> implements Iterable<Item>{
     private static final int DEFAULT_SIZE = 1;
     private Item[] data;
     private int index = -1;
@@ -108,14 +108,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             for (int i = 0; i < size; i++) {
                 idxs[i] = i;
             }
-            randomIdxs();
+            StdRandom.shuffle(idxs);
+//            randomIdxs();
         }
 
         /**
          * 打乱输出顺序
          */
         private void randomIdxs() {
-            int swapTimes = (size >> 1) ;//交换次数，因为进行交换的对象在前面，所以只要交换后一半即可
+            int swapTimes = (size >> 1);//交换次数，因为进行交换的对象在前面，所以只要交换后一半即可,但并不均匀
             for (int i = size - 1; i > swapTimes; i--) {
                 int o = idxs[i];
                 int replaced = StdRandom.uniform(i);
