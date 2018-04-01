@@ -1,7 +1,10 @@
 package com.archer.assignment.week3;
 
-import edu.princeton.cs.algs4.InsertionX;
+
 import edu.princeton.cs.algs4.MergeX;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class FastCollinearPoints {
     private LineSegment[] lineSegments;
@@ -20,18 +23,23 @@ public class FastCollinearPoints {
         slopes = new double[2];
         startPoints = new Point[2];
         Point[] cp = new Point[length];
+        StableComparator stableComparator = new StableComparator();
         System.arraycopy(points, 0, cp, 0, length);
         for (int i = 0; i < length; i++) {
             origin = points[i];
-            MergeX.sort(cp, origin.slopeOrder());
-            int start = 1, end = 1;//第一个肯定是自身，slopeOrder()相同点的比较返回值为负无穷小，跳过；[start,end],start，end上的Point都包含
+            stableComparator.setOrigin(origin);
+            MergeX.sort(cp, stableComparator);
+            int start = 1, end = 1;//[start,end],start，end上的Point都包含
             int edge = length - 1;
+            double slopeToStart = -1;
             for (int j = 1; j < edge; j++) {
-                if (origin.slopeTo(cp[j]) == origin.slopeTo(cp[j + 1])) {
+                if (slopeToStart == -1) slopeToStart = origin.slopeTo(cp[start]);
+                if (slopeToStart == origin.slopeTo(cp[j + 1])) {
                     end = j + 1;
                 } else {
                     executeAddLine(cp, origin, start, end);
                     start = end = j + 1;
+                    slopeToStart = -1;
                 }
             }
             if (start != end) {//如果最后几个点可以构成一条线，上一个循环直到结束也不会进入保存线段的流程，最后做一次保存
@@ -43,11 +51,10 @@ public class FastCollinearPoints {
     private void executeAddLine(Point[] points, Point origin, int start, int end) {
         int pCount = end - start + 1;
         if (pCount >= 3) {//算上自身就至少是4个点
-            Point[] tmp = new Point[pCount + 1];
-            System.arraycopy(points, start, tmp, 0, pCount);
-            tmp[pCount] = origin;
-            InsertionX.sort(tmp);
-            addLineSegment(tmp[0], tmp[pCount]);
+            Point startP = points[start], endP = points[end];
+            if (origin.compareTo(startP) < 0) startP = origin;
+            if (origin.compareTo(endP) > 0) endP = origin;
+            addLineSegment(startP, endP);
         }
     }
 
@@ -115,4 +122,22 @@ public class FastCollinearPoints {
         }
         return true;
     }
+
+    private static class StableComparator implements Comparator<Point> {
+
+        Comparator<Point> firstOrder;
+
+        @Override
+        public int compare(Point o1, Point o2) {
+            int ret;
+            ret = firstOrder.compare(o1, o2);
+            if (ret == 0) return o1.compareTo(o2);//只有斜率相同时，按照y坐标排序，保证排序后的数组内处于有效线段的点的坐标是按y坐标递增存放
+            return ret;
+        }
+
+        void setOrigin(Point origin) {
+            firstOrder = origin.slopeOrder();
+        }
+    }
+
 }

@@ -89,8 +89,6 @@ public class Point implements Comparable<Point> {
         if (y < that.y) return y - that.y;
         else if (y == that.y) return x - that.x;
         else return y - that.y;
-//        if (y <= that.y && x < that.x) return y - that.y + x - that.x;
-//        else return y - that.y;
     }
 
     /**
